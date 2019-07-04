@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Payment</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div style="max-width: 330px; padding:15px; margin: 0 auto;">
+        <div class="modal-body">
+            <form id="Payment">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" Name="CardNumber" id="CardNumber" placeholder="CardNumber" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="NameOnCard" id="NameOnCard" placeholder="NameOnCard" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="ExpiryDate" id="ExpiryDate" placeholder="ExpiryDate" />
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <button class="btn btn-info form-control" type="submit" onclick="SaveForm()"><i class="glyphicon glyphicon-registration-mark"></i> Submit</button>
+                <
+            </div>
+        </div>
+    </div>
+    <script>
+        function SaveForm() {
+            var objAjax = new Object();
+            objAjax.CardNumber = document.getElementById('CardNumber').value;
+            objAjax.NameOnCard = document.getElementById('NameOnCard').value;
+            objAjax.ExpiryDate = document.getElementById('ExpiryDate').value;
+
+            if (objAjax.CardNumber == "" || objAjax.NameOnCard == "" || objAjax.ExpiryDate == "") {
+                alert("Fields are missing");
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(objAjax),
+                contentType: "application/json",
+                dataType: "json",
+                traditional: true,
+                url: "/Payment/Payment",
+                success: function (result) {
+                    alert("Payment successful");
+                    $("Payment")[0].reset();
+                    //window.location.href = './SignIn';
+                }
+            });
+        }
+    </script>
+}
